@@ -19,10 +19,10 @@
                 "path": "/addCustomer",
                 "description": "Creates a new entry of a customer object",
                 "schema": {
-                    "divCd": "STRING",
-                    "pltCd": "STRING",
-                    "chsNo": "STRING",
-                    "status": "BOOL"
+                    "divCd": "string",
+                    "pltCd": "string",
+                    "chsNo": "string",
+                    "status": "boolean"
                 }
             }
         ]

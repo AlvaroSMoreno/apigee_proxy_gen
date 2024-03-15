@@ -14,6 +14,9 @@
         <Policy>AM-SetTargetReq</Policy>
         <Policy>JS-SetTargetURL</Policy>
         <Policy>RF-InvalidRequest-NotFound</Policy>
+        {{#each evs}}
+        <Policy>{{this.ev_name}}</Policy>
+        {{/each}}
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>

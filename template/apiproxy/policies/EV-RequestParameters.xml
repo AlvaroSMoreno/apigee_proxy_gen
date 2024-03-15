@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables continueOnError="false" enabled="true" name="EV-RequestParameters-{{flow}}">
+    <DisplayName>EV-RequestParameters-{{flow}}</DisplayName>
+    <Source>request</Source>
+    <Properties/>
+    <JSONPayload>
+        {{#each routes}}
+        <Variable name="{{this.field}}" type="{{this.type}}">
+            <JSONPath>$.{{this.field}}</JSONPath>
+        </Variable>
+        {{/each}}
+    </JSONPayload>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

@@ -21,18 +21,34 @@ if(config_file.proxy_endpoint.security == 'apikey') {
 }
 
 const arr_proxy_routes = config_file.proxy_endpoint.routes;
+let arr_evs_policies = [];
 
 for (const i in arr_proxy_routes) {
     //console.log(arr_routes[i]);
     let item = arr_proxy_routes[i];
     if(item.method == 'POST' && (item.hasOwnProperty("schema"))) {
         config_file.proxy_endpoint.routes[i].map_schema = true;
+        // Create EVs Policies for this Flow
+        let route_config = {
+            flow: item.tag,
+            routes: []
+        }
+        Object.keys(item.schema).forEach(key => {
+            const type = item.schema[key];
+            const field = key;
+            route_config.routes.push({type, field});
+        });
+        const ev_policy_name = `EV-RequestParameters-${route_config.flow}.xml`;
+        const ev_template_policy = fs.readFileSync('./template/apiproxy/policies/EV-RequestParameters.xml', 'utf8');
+        const tmp_file = Handlebars.compile(ev_template_policy);
+        const res_temp = tmp_file(route_config);
+        arr_evs_policies.push({name: ev_policy_name, file: res_temp, ev_name: `EV-RequestParameters-${route_config.flow}`});
     }
     else {
         config_file.proxy_endpoint.routes[i].map_schema = false;
     }
 }
-
+config_file.evs = arr_evs_policies;
 const arr_target_routes = config_file.target_endpoint.routes;
 
 for (const i in arr_target_routes) {
@@ -73,10 +89,13 @@ let moveTo = "./output/apiproxy/policies"
 // initialization policy
 fs.cpSync(moveFrom, moveTo, {recursive: true});
 fs.writeFileSync(moveTo + '/FC-Initialization.xml', res5, {encoding:'utf8',flag:'w'});
-/* fs.unlinkSync(moveTo + '/AM-SetTargetReq.xml');
-// create the AM-SetTargetReq-Flows needed...
-fs.writeFileSync(`${moveTo}/AM-SetTargetReq-${flow_name}.xml`, am_set_target_req_policy, {encoding:'utf8',flag:'w'}); */
 
+// Create the corresponding EVs in Output files
+fs.unlinkSync(moveTo + '/EV-RequestParameters.xml');
+for(const i in arr_evs_policies) {
+    let item = arr_evs_policies[i];
+    fs.writeFileSync(`${moveTo}/${item.name}`, item.file, {encoding:'utf8',flag:'w'});
+}
 
 // Copying proxies into the output directory...
 moveFrom = "./template/apiproxy/proxies";

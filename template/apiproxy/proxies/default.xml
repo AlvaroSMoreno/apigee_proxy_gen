@@ -28,7 +28,7 @@
     {{#if this.map_schema}}
         <Request>
             <Step>
-                <Name>EV-PayloadRequest-{{this.tag}}</Name>
+                <Name>EV-RequestParameters-{{this.tag}}</Name>
             </Step>
         </Request>
     {{else}}
