@@ -1,7 +1,11 @@
 # Apigee Proxy Generator
 Tool to generate an Apigee X Proxy bundle from config_file <br>
 
-![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Apigee_logo.svg/350px-Apigee_logo.svg.png)
+![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Apigee_logo.svg/400px-Apigee_logo.svg.png)
+
+## Requirements
+![alt text](https://miro.medium.com/v2/resize:fit:150/1*TY9uBBO9leUbRtlXmQBiug.png)
+![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Git-logo.svg/230px-Git-logo.svg.png)
 
 ## Install
 ```sh
@@ -75,6 +79,12 @@ npm install
 ```sh
 npm run start
 ```
+
+## Upload Proxy Bundle
+Grab the Zip File created (same name as the Proxy name .ZIP) and create a new proxy with it.
+
+![image](https://github.com/AlvaroSMoreno/apigee_proxy_gen/assets/18651889/eb5ca04f-c1ce-4755-9913-1480176528ad)
+
 
 ## Author
 Alvaro Moreno :octocat: :rocket:
