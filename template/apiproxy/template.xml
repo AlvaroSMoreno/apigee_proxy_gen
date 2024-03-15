@@ -11,6 +11,7 @@
         <Policy>FC-Logging</Policy>
         <Policy>FC-Initialization</Policy>
         <Policy>AM-SetTargetURL</Policy>
+        <Policy>AM-SetTargetReq</Policy>
         <Policy>JS-SetTargetURL</Policy>
         <Policy>RF-InvalidRequest-NotFound</Policy>
     </Policies>
