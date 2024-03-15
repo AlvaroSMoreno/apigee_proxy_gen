@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout continueOnError="false" enabled="true" name="{{proxy_endpoint.security_policy}}">
+  <DisplayName>{{proxy_endpoint.security_policy}}</DisplayName>
+  <FaultRules/>
+  <Properties/>
+  <SharedFlowBundle>{{proxy_endpoint.sf_security}}</SharedFlowBundle>
+</FlowCallout>

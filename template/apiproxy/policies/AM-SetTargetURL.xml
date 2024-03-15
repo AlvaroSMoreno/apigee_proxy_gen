@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-SetTargetURL">
+    <DisplayName>AM-SetTargetURL</DisplayName>
+    <Remove>
+        <Headers>
+            <Header name="usequerystring">true</Header>
+            <Header name="sec-ch-ua-mobile"/>
+        </Headers>
+    </Remove>
+    <AssignVariable>
+        <Name>targetBasePath</Name>
+        <Template>{target_url}</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>target.copy.pathsuffix</Name>
+        <Value>false</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>target.copy.queryparams</Name>
+        <Value>false</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

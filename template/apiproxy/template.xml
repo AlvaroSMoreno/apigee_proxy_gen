@@ -1,0 +1,26 @@
+<APIProxy revision="{{rev}}" name="{{name}}">
+    <DisplayName>{{display_name}}</DisplayName>
+    <Description>{{description}}</Description>
+    <CreatedAt>{{created_at}}</CreatedAt>
+    <LastModifiedAt>{{created_at}}</LastModifiedAt>
+    <BasePaths>{{proxy_endpoint.basepath}}</BasePaths>
+    <Policies>
+        <Policy>FC-AddResponseHeaders</Policy>
+        <Policy>FC-ProxyFaultRules</Policy>
+        <Policy>FC-TargetFaultRules</Policy>
+        <Policy>FC-Logging</Policy>
+        <Policy>FC-Initialization</Policy>
+        <Policy>AM-SetTargetURL</Policy>
+        <Policy>JS-SetTargetURL</Policy>
+        <Policy>RF-InvalidRequest-NotFound</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>jsc://JS-SetTargetURL.js</Resource>
+    </Resources>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>

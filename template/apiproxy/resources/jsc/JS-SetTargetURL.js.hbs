@@ -1,0 +1,27 @@
+var path_suffix = context.getVariable('proxy.pathsuffix');
+var target_url = '';
+
+{{#each target_endpoint.routes}}
+    if(path_suffix == '{{this.path}}') {
+        target_url = '{{this.uri}}';
+    {{#if this.map_schema}}
+        // payload section
+        var target_payload = {{this.schema}};
+        var payload = {};
+        for(var i in obj) {
+            var item = obj[i];
+            if(item.startsWith('$_')) {
+                payload[i] = context.getVariable(`${item.slice(2)}`);
+            }
+            else {
+                payload[i] = `${item}`;
+            }
+        }
+        context.setVariable("payload", payload);
+    {{else}}
+        // No payload...
+    {{/if}}
+    }
+{{/each}}
+
+context.setVariable("target_url",target_url);

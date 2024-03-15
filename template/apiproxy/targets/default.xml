@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="default">
+    <FaultRules>
+        <FaultRule name="fault-rule">
+            <Condition>(is.error)</Condition>
+            <Step>
+                <Name>FC-Logging</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="DefaultTargetEndpoint">
+        <Step>
+            <Name>FC-TargetFaultRules</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request/>
+        <Response/>
+    </PreFlow>
+    <Flows>
+    {{#each target_endpoint.routes}}
+        <Flow name="{{this.tag}}">
+            <Description>{{this.description}}</Description>
+            <Request>
+                <Step>
+                    <Name>JS-SetTargetURL</Name>
+                </Step>
+            {{#if this.map_schema}}
+                <Step>
+                    <Name>AM-SetTargetReq</Name>
+                </Step>
+            {{else}}
+                <Step>
+                    <Name>AM-SetTargetURL</Name>
+                </Step>
+            {{/if}}
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "{{this.path}}") and (request.verb = "{{this.method}}")</Condition>
+        </Flow>
+    {{/each}}
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPTargetConnection>
+        {{#if target_endpoint.target_server}}
+            <LoadBalancer>
+                <Server name="{{target_endpoint.server}}"/>
+            </LoadBalancer>
+            <Path>{targetBasePath}</Path>
+        {{else}}
+            <URL>{{target_endpoint.server}}</URL>
+            <Path>{targetBasePath}</Path>
+        {{/if}}
+    </HTTPTargetConnection>
+</TargetEndpoint>

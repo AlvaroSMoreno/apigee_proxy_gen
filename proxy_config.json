@@ -1,0 +1,58 @@
+{
+    "name": "Customers",
+    "display_name": "Customers",
+    "rev": "1",
+    "description": "This API Proxy exposes data from the Customer Node-Express backend API",
+    "proxy_endpoint": {
+        "basepath": "/resources/customers/v1",
+        "security": "oauth2",
+        "routes": [
+            {
+                "tag": "AllCustomers",
+                "method": "GET",
+                "path": "/allCustomers",
+                "description": "Gets all active customers"
+            },
+            {
+                "tag": "CreateCustomer",
+                "method": "POST",
+                "path": "/addCustomer",
+                "description": "Creates a new entry of a customer object",
+                "schema": {
+                    "divCd": "STRING",
+                    "pltCd": "STRING",
+                    "chsNo": "STRING",
+                    "status": "BOOL"
+                }
+            }
+        ]
+    },
+    "target_endpoint": {
+        "type": "target_server",
+        "server": "mocktargetapigee",
+        "security": "none",
+        "routes": [
+            {
+                "tag": "AllCustomers",
+                "method": "GET",
+                "path": "/all",
+                "description": "Gets all active customers",
+                "uri": "/api/customers/getAllCustomers"
+            },
+            {
+                "tag": "CreateCustomer",
+                "method": "POST",
+                "path": "/addCustomer",
+                "description": "Creates a new entry of a customer object",
+                "uri": "/api/customers/addNewCustomer",
+                "schema": {
+                    "IN_DIV_CD": "$_divCd",
+                    "IN_PLT_CD": "$_pltCd",
+                    "IN_CHAS_NO": "$_chsNo",
+                    "IN_STATUS": "$_status",
+                    "IN_TRACE": "Y"
+                }
+            }
+        ]
+    }
+}

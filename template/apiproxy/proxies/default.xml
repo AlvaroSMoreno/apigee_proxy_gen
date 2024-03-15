@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <FaultRules>
+        <FaultRule name="fault-rule">
+            <Condition>(is.error)</Condition>
+            <Step>
+                <Name>FC-Logging</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="DefaultProxyEndpoint">
+        <Step>
+            <Name>FC-ProxyFaultRules</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>{{proxy_endpoint.security_policy}}</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+<Flows>
+  {{#each proxy_endpoint.routes}}
+    <Flow name="{{this.tag}}">
+        <Description>{{this.description}}</Description>
+    {{#if this.map_schema}}
+        <Request>
+            <Step>
+                <Name>EV-PayloadRequest-{{this.tag}}</Name>
+            </Step>
+        </Request>
+    {{else}}
+        <Request/>
+    {{/if}}
+        <Response/>
+        <Condition>(proxy.pathsuffix MatchesPath "{{this.path}}") and (request.verb = "{{this.method}}")</Condition>
+    </Flow>
+  {{/each}}
+    <Flow name="NotFound">
+        <Request>
+            <Step>
+                <Name>RF-InvalidRequest-NotFound</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </Flow>
+</Flows>
+<PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <Step>
+                <Name>FC-AddResponseHeaders</Name>
+            </Step>
+        </Response>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>{{proxy_endpoint.basepath}}</BasePath>
+    </HTTPProxyConnection>
+    <RouteRule name="NoRoute">
+        <Condition>(request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null) or (proxy.pathsuffix MatchesPath "/docs")</Condition>
+    </RouteRule>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>
