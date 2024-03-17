@@ -2,16 +2,29 @@
     "name": "Customers",
     "display_name": "Customers",
     "rev": "1",
-    "description": "This API Proxy exposes data from the Customer Node-Express backend API",
+    "description": "This API Proxy exposes data from the Scangun - Inquiry backend API",
     "proxy_endpoint": {
-        "basepath": "/resources/customers/v1",
-        "security": "oauth2",
+        "basepath": "/scangun/inquiry/v1",
+        "security": "apikey",
         "routes": [
             {
                 "tag": "AllCustomers",
                 "method": "GET",
                 "path": "/allCustomers",
                 "description": "Gets all active customers"
+            },
+            {
+                "tag": "CustomerByID",
+                "method": "GET",
+                "path": "/customerId",
+                "params": [
+                    {
+                        "id": "customerID",
+                        "name": "customerID",
+                        "in": "query"
+                    }
+                ],
+                "description": "Gets an active customer by ID"
             },
             {
                 "tag": "CreateCustomer",
@@ -38,6 +51,19 @@
                 "path": "/all",
                 "description": "Gets all active customers",
                 "uri": "/api/customers/getAllCustomers"
+            },
+            {
+                "tag": "CustomerByID",
+                "method": "GET",
+                "path": "/customerId",
+                "description": "Gets an active customer by ID",
+                "params": [
+                    {
+                        "name": "$_customerID.name",
+                        "in": "$_customerID.in"
+                    }
+                ],
+                "uri": "/api/customers/getCustomerByID"
             },
             {
                 "tag": "CreateCustomer",

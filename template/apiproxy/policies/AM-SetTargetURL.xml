@@ -17,7 +17,7 @@
     </AssignVariable>
     <AssignVariable>
         <Name>target.copy.queryparams</Name>
-        <Value>false</Value>
+        <Value>{{proxy_endpoint.params_active}}</Value>
     </AssignVariable>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
 </AssignMessage>

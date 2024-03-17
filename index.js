@@ -22,7 +22,7 @@ if(config_file.proxy_endpoint.security == 'apikey') {
 
 const arr_proxy_routes = config_file.proxy_endpoint.routes;
 let arr_evs_policies = [];
-
+config_file.proxy_endpoint.params_active = false;
 for (const i in arr_proxy_routes) {
     //console.log(arr_routes[i]);
     let item = arr_proxy_routes[i];
@@ -47,6 +47,10 @@ for (const i in arr_proxy_routes) {
     else {
         config_file.proxy_endpoint.routes[i].map_schema = false;
     }
+
+    if(item.hasOwnProperty("params")) {
+        config_file.proxy_endpoint.params_active = true;
+    }
 }
 config_file.evs = arr_evs_policies;
 const arr_target_routes = config_file.target_endpoint.routes;
@@ -69,12 +73,16 @@ const proxy_default = fs.readFileSync('./template/apiproxy/proxies/default.xml',
 const target_default = fs.readFileSync('./template/apiproxy/targets/default.xml', 'utf8');
 const js_target = fs.readFileSync('./template/apiproxy/resources/jsc/JS-SetTargetURL.js.hbs', 'utf8');
 const initialization_policy = fs.readFileSync('./template/apiproxy/policies/FC-Initialization.xml', 'utf8');
+const setam_target_url_policy = fs.readFileSync('./template/apiproxy/policies/AM-SetTargetURL.xml', 'utf8');
+const setam_target_req_policy = fs.readFileSync('./template/apiproxy/policies/AM-SetTargetReq.xml', 'utf8');
 
 const template1 = Handlebars.compile(proxy_default);
 const template2 = Handlebars.compile(target_default);
 const template3 = Handlebars.compile(js_target);
 const template4 = Handlebars.compile(template_default);
 const template5 = Handlebars.compile(initialization_policy);
+const template6 = Handlebars.compile(setam_target_url_policy);
+const template7 = Handlebars.compile(setam_target_req_policy);
 
 
 const res1 = template1(config_file);
@@ -82,6 +90,8 @@ const res2 = template2(config_file);
 const res3 = template3(config_file);
 const res4 = template4(config_file);
 const res5 = template5(config_file);
+const res6 = template6(config_file);
+const res7 = template7(config_file);
 
 // Copying Policies into the output directory...
 let moveFrom = "./template/apiproxy/policies";
@@ -89,6 +99,12 @@ let moveTo = "./output/apiproxy/policies"
 // initialization policy
 fs.cpSync(moveFrom, moveTo, {recursive: true});
 fs.writeFileSync(moveTo + '/FC-Initialization.xml', res5, {encoding:'utf8',flag:'w'});
+
+// Check for the right params AM property
+fs.unlinkSync(moveTo + '/AM-SetTargetURL.xml');
+fs.unlinkSync(moveTo + '/AM-SetTargetReq.xml');
+fs.writeFileSync(moveTo + '/AM-SetTargetURL.xml', res6, {encoding:'utf8',flag:'w'});
+fs.writeFileSync(moveTo + '/AM-SetTargetReq.xml', res7, {encoding:'utf8',flag:'w'});
 
 // Create the corresponding EVs in Output files
 fs.unlinkSync(moveTo + '/EV-RequestParameters.xml');
